@@ -4,12 +4,23 @@ Quick sample demoing acs adhoc calling to a Teams user
 
 ## Setup
 
+Install dependencies
+
 ```sh
-npm i
+npm run setup
 ```
 
-## Run
+## Run Locally
+
+Setup environment variables
+
+```powershell
+# Powershell
+$env:ResourceConnectionString='<connection string>'
+```
+
+Run server and app
 
 ```sh
-npm start
+npm run start
 ```
