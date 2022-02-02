@@ -31,3 +31,14 @@ In another, start the app:
 cd app
 npm run start
 ```
+
+## Deploy to Azure Web Apps
+
+```sh
+cd server
+npm run build
+cd ../app
+npm run build
+npm run package
+# Deploy the dist directory
+```
