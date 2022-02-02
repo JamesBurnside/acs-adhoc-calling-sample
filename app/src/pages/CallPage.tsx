@@ -21,12 +21,13 @@ const detectMobileSession = (): boolean => !!new MobileDetect(window.navigator.u
 export interface CallPageProps {
   token: string;
   userId: CommunicationUserIdentifier;
-  callLocator: GroupCallLocator | TeamsMeetingLinkLocator;
+  callLocator?: GroupCallLocator | TeamsMeetingLinkLocator;
+  teamsUserMRI?: string;
   displayName: string;
 }
 
 export const CallPage = (props: CallPageProps): JSX.Element => {
-  const { token, userId, callLocator, displayName } = props;
+  const { token, userId, callLocator, teamsUserMRI, displayName } = props;
   const [adapter, setAdapter] = useState<CallAdapter>();
   const callIdRef = useRef<string>();
   const adapterRef = useRef<CallAdapter>();
@@ -46,7 +47,8 @@ export const CallPage = (props: CallPageProps): JSX.Element => {
         userId,
         displayName,
         credential: createAutoRefreshingCredential(toFlatCommunicationIdentifier(userId), token),
-        locator: callLocator
+        locator: callLocator as any,
+        outboundTeamsUserMRI: teamsUserMRI
       });
       adapter.on('error', (e) => {
         // Error is already acted upon by the Call composite, but the surrounding application could
@@ -63,7 +65,7 @@ export const CallPage = (props: CallPageProps): JSX.Element => {
     return () => {
       adapterRef?.current?.dispose();
     };
-  }, [callLocator, displayName, token, userId]);
+  }, [callLocator, displayName, token, userId, teamsUserMRI]);
 
   if (!adapter) {
     return (

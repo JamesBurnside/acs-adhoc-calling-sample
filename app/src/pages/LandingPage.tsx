@@ -4,7 +4,7 @@ import heroSVG from '../assets/hero.svg';
 import { DisplayNameField } from '../components/DisplayNameField';
 import { Login } from '@microsoft/mgt-react';
 import { useIsSignedIn } from '../hooks/useIsSignedIn';
-import { PeoplePicker, People } from '@microsoft/mgt-react';
+import { PeoplePicker } from '@microsoft/mgt-react';
 
 enum LocalStorageKeys {
   DisplayName = 'DisplayName',
@@ -13,7 +13,7 @@ enum LocalStorageKeys {
 
 const callDetailsEntryOptionsGroupLabel = 'Option to enter outbound call details';
 const callDetailsEntryOptions: IChoiceGroupOption[] = [
-  { key: 'GraphSearch', text: 'Graph Search', disabled: false },
+  { key: 'GraphSearch', text: 'Graph Search', disabled: true },
   { key: 'Manual', text: 'Manual Entry' }
 ];
 

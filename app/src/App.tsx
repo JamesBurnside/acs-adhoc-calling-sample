@@ -70,7 +70,7 @@ function App() {
           token={userCredentials!.token}
           displayName={callDetails!.displayName}
           callLocator={{groupId: '13b75848-eeb0-4f6e-8e86-84107652be14' /** random guid for now */}}
-          // callLocator={callDetails!.teamsUserMRI as any}
+          teamsUserMRI={callDetails!.teamsUserMRI}
         />);
       default: <>Page unknown</>;
     }
