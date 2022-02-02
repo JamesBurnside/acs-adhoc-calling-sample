@@ -8,9 +8,10 @@ import {
   CallAdapterState,
   CallComposite,
   createAzureCommunicationCallAdapter,
-  toFlatCommunicationIdentifier
+  toFlatCommunicationIdentifier,
+  CustomCallControlButtonCallback
 } from '@azure/communication-react';
-import { FontIcon, Spinner, Stack } from '@fluentui/react';
+import { FontIcon, Panel, Spinner, Stack } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { createAutoRefreshingCredential } from '../utils/credential';
 import MobileDetect from 'mobile-detect';
@@ -29,7 +30,8 @@ export const CallPage = (props: CallPageProps): JSX.Element => {
   const [adapter, setAdapter] = useState<CallAdapter>();
   const callIdRef = useRef<string>();
   const adapterRef = useRef<CallAdapter>();
-  const [isMobileSession, setIsMobileSession] = useState<boolean>(detectMobileSession());
+  const [isMobileSession, setIsMobileSession] = useState(detectMobileSession());
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   // Whenever the sample is changed from desktop -> mobile using the emulator, make sure we update the formFactor.
   useEffect(() => {
@@ -71,31 +73,36 @@ export const CallPage = (props: CallPageProps): JSX.Element => {
     );
   }
 
-  return (
-    <CallComposite
-      adapter={adapter}
-      callInvitationUrl={window.location.href}
-      formFactor={isMobileSession ? 'mobile' : 'desktop'}
-      options={{
-        callControls: {
-          onFetchCustomButtonProps:[
-            () => ({
-              placement: 'afterEndCallButton',
-              text: !isMobileSession ? 'Call Diagnostics' : undefined,
-              onRenderIcon: DownloadCallLogsIcon,
-              onClick: () => {
-                alert('button clicked!');
-              }
-            })
-          ]
-        }
-      }}
-    />
-  );
-};
+  const callDiagnosticButton: CustomCallControlButtonCallback = () => ({
+    placement: 'afterEndCallButton',
+    text: !isMobileSession ? 'Call Diagnostics' : undefined,
+    onRenderIcon: () => <FontIcon style={{height: '20px', width: '20px'}} iconName="UnknownCall" />,
+    onClick: () => {
+      setIsPanelOpen(true);
+    }
+  });
 
-const DownloadCallLogsIcon = (): JSX.Element | null => {
   return (
-    <FontIcon style={{height: '20px', width: '20px'}} iconName="UnknownCall" />
-  )
+    <>
+      <CallComposite
+        adapter={adapter}
+        callInvitationUrl={window.location.href}
+        formFactor={isMobileSession ? 'mobile' : 'desktop'}
+        options={{
+          callControls: {
+            onFetchCustomButtonProps:[callDiagnosticButton]
+          }
+        }}
+      />
+      <Panel
+        isLightDismiss
+        isOpen={isPanelOpen}
+        onDismiss={() => setIsPanelOpen(false)}
+        closeButtonAriaLabel="Close"
+        headerText="Call Diagnostics"
+      >
+        <p>Call details goes here...</p>
+      </Panel>
+    </>
+  );
 };
