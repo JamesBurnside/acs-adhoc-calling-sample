@@ -26,7 +26,6 @@ export const LandingPage = (props: LandingPageProps) => {
   const [displayName, setDisplayName] = useState<string | undefined>((window.localStorage && window.localStorage.getItem(LocalStorageKeys.DisplayName)) ?? undefined);
   const [teamsUserMRI, setTeamsUserMRI] = useState<string | undefined>((window.localStorage && window.localStorage.getItem(LocalStorageKeys.TeamsUserMRI)) ?? undefined);
   const [callEntryChosenOption, setCallEntryChosenOption] = useState<IChoiceGroupOption>(callDetailsEntryOptions[1]);
-  // const [isSignedIn, setIsSignedIn] = useState(false);
   const buttonDisabled = props.disableButton || !(callEntryChosenOption.key === 'Manual' && displayName && teamsUserMRI);
 
   return (
@@ -97,7 +96,7 @@ const ManualEntryOptions = (props: {
     <Stack.Item>
       <TextField
         inputClassName={inputBoxTextStyle}
-        label="Enter Teams User MRI"
+        label="Enter Teams User ID"
         onChange={(_, newValue) => props.setTeamsUserMRI(newValue ?? '')}
         required
         styles={textFieldStyleProps}

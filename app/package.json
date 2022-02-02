@@ -27,7 +27,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "rimraf build && react-scripts build",
     "test": "echo 'no tests",
     "eject": "react-scripts eject",
     "package": "rimraf dist && copyfiles -E -u 3 \"../Server/dist/**/*\" dist && copyfiles -E \"build/**/*\" dist"

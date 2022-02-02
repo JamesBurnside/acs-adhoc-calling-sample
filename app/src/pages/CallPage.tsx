@@ -43,6 +43,8 @@ export const CallPage = (props: CallPageProps): JSX.Element => {
 
   useEffect(() => {
     (async () => {
+      console.log(`Calling teams mri: ${teamsUserMRI ?? 'undefined'}`);
+
       const adapter = await createAzureCommunicationCallAdapter({
         userId,
         displayName,
@@ -103,7 +105,9 @@ export const CallPage = (props: CallPageProps): JSX.Element => {
         closeButtonAriaLabel="Close"
         headerText="Call Diagnostics"
       >
-        <p>Call details goes here...</p>
+        <p>Call diagnostic details to go here...</p>
+        <p>Callee MRI: {teamsUserMRI}</p>
+        <p>CallId: {callIdRef.current}</p>
       </Panel>
     </>
   );
