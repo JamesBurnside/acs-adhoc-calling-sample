@@ -23,11 +23,10 @@ export const LandingPage = (props: LandingPageProps) => {
       wrap
       horizontalAlign="center"
       verticalAlign="center"
-      tokens={{ childrenGap: '4rem' }}
-      className={containerStyle}
+      verticalFill
     >
-      <Stack.Item>
-        <Image alt="logo" className={imgStyle} src={heroSVG.toString()} />
+      <Stack.Item className={imgContainerStyle}>
+        <Image alt="logo" src={heroSVG.toString()} />
       </Stack.Item>
       <Stack.Item>
         <Stack>
@@ -72,21 +71,18 @@ const headerStyle = mergeStyles({
   fontWeight: 600,
   fontSize: '1.25rem',
   lineHeight: '1.75rem',
-  width: '20rem',
   marginBottom: '1.5rem'
 });
 
-const containerStyle = mergeStyles({
-  height: 'calc(100% - 4rem)', // compensate for children  tokens that have 4rem
-  width: 'calc(100% - 4rem)'// compensate for children tokens that have 4rem
-});
-
-const imgStyle = mergeStyles({
+const imgContainerStyle = mergeStyles({
   width: '16.5rem',
   padding: '0.5rem',
   '@media (max-width: 67.1875rem)': {
     display: 'none'
-  }
+  },
+
+  marginRight: '4rem', //space between image and right-hand-side info
+  marginLeft: '-6rem' //quick hack back into the center
 });
 
 const configContainerStackTokens = {
