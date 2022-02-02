@@ -4,6 +4,7 @@ import { initializeIcons } from '@fluentui/react';
 import { CallPage } from './pages/CallPage';
 import { CommunicationUserIdentifier } from '@azure/communication-common';
 import { NoticePage } from './pages/NoticePage';
+import { FloatingErrorBar } from './components/FloatingErrorBar';
 
 initializeIcons();
 
@@ -19,7 +20,7 @@ type UserCredentials = {
   userId: CommunicationUserIdentifier
 }
 
-type ErrorPageDetails = {
+type ErrorDetails = {
   message: string;
   error: string;
 }
@@ -27,12 +28,12 @@ type ErrorPageDetails = {
 function App() {
   const [callDetails, setCallDetails] = useState<CallDetails | undefined>();
   const [userCredentials, setUserCredentials] = useState<UserCredentials>();
-  const [error, setError] = useState<ErrorPageDetails | undefined>();
+  const [error, setError] = useState<ErrorDetails | undefined>();
+  const [fetchingCredentials, setFetchingCredentials] = useState(false);
 
-  // Get Azure Communications Service token from the server
-  useEffect(() => {
-    (async () => {
-      try {
+  const fetchUserCredentials = async () => {
+    try {
+        setFetchingCredentials(true);
         const { token, user } = await fetchTokenResponse();
         setUserCredentials({ token, userId: user });
       } catch (e) {
@@ -41,23 +42,39 @@ function App() {
           error: (e as any).message as string
         })
       }
-    })();
-  }, []);
-
-  const appState: AppState = !!error ? 'ErrorPage' : (!!callDetails && !!userCredentials) ? 'CallPage' : 'Landing';
-
-  switch(appState) {
-    case 'Landing': return <LandingPage onStartCall={(callDetails) => {setCallDetails(callDetails)}} />;
-    case 'CallPage': return (
-      <CallPage
-        userId={userCredentials!.userId}
-        token={userCredentials!.token}
-        displayName={callDetails!.displayName}
-        callLocator={{groupId: '13b75848-eeb0-4f6e-8e86-84107652be14' /** random guid for now */}}
-        // callLocator={callDetails!.teamsUserMRI as any}
-      />);
-    case 'ErrorPage' : return <NoticePage title={error!.message} moreDetails={error!.error} iconName='AlertSolid' />
+      setFetchingCredentials(false);
   }
+
+  const appState: AppState = (!!callDetails && !!userCredentials) ? 'CallPage' : 'Landing';
+
+  const pageContent = () => {
+    switch(appState) {
+      case 'Landing': return (
+        <LandingPage
+          disableButton={fetchingCredentials}
+          onStartCall={(callDetails) => {
+            fetchUserCredentials();
+            setCallDetails(callDetails)
+          }}
+        />);
+      case 'CallPage': return (
+        <CallPage
+          userId={userCredentials!.userId}
+          token={userCredentials!.token}
+          displayName={callDetails!.displayName}
+          callLocator={{groupId: '13b75848-eeb0-4f6e-8e86-84107652be14' /** random guid for now */}}
+          // callLocator={callDetails!.teamsUserMRI as any}
+        />);
+      default: <>Page unknown</>;
+    }
+  }
+
+  return (
+    <>
+      {error && <FloatingErrorBar shortMessage={error.message} moreDetails={error.error} onDismiss={() => setError(undefined)} />}
+      {pageContent()}
+    </>
+  );
 }
 
 export default App;

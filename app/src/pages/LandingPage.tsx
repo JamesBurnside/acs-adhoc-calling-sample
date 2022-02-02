@@ -10,12 +10,13 @@ enum LocalStorageKeys {
 
 export interface LandingPageProps {
   onStartCall(callDetails: { displayName: string; teamsUserMRI: string }): void;
+  disableButton?: boolean;
 }
 
 export const LandingPage = (props: LandingPageProps) => {
   const [displayName, setDisplayName] = useState<string | undefined>((window.localStorage && window.localStorage.getItem(LocalStorageKeys.DisplayName)) ?? undefined);
   const [teamsUserMRI, setTeamsUserMRI] = useState<string | undefined>((window.localStorage && window.localStorage.getItem(LocalStorageKeys.TeamsUserMRI)) ?? undefined);
-  const buttonEnabled = displayName && teamsUserMRI;
+  const buttonDisabled = props.disableButton || !(displayName && teamsUserMRI);
 
   return (
     <Stack
@@ -49,7 +50,7 @@ export const LandingPage = (props: LandingPageProps) => {
           </Stack.Item>
           <Stack.Item>
             <PrimaryButton
-              disabled={!buttonEnabled}
+              disabled={buttonDisabled}
               className={buttonStyle}
               text={'Start Call'}
               onClick={() => {
