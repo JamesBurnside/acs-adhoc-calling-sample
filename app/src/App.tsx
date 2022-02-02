@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { LandingPage } from './pages/LandingPage';
 import { initializeIcons } from '@fluentui/react';
 import { CallPage } from './pages/CallPage';
 import { CommunicationUserIdentifier } from '@azure/communication-common';
-import { NoticePage } from './pages/NoticePage';
 import { FloatingErrorBar } from './components/FloatingErrorBar';
+
+import { Providers } from '@microsoft/mgt-element';
+import { Msal2Provider } from '@microsoft/mgt-msal2-provider';
+
+Providers.globalProvider = new Msal2Provider({
+  clientId: 'REPLACE_WITH_CLIENTID',
+  scopes: ['user.read', 'people.read']
+});
 
 initializeIcons();
 
