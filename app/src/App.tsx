@@ -6,13 +6,18 @@ initializeIcons();
 
 type AppState = 'Landing' | 'FuturePage';
 
-function App() {
-  const [displayName, setDisplayName] = useState<string | undefined>();
+type CallDetails = {
+  displayName: string;
+  teamsUserMRI: string
+}
 
-  const appState: AppState = !displayName ? 'Landing' : 'FuturePage';
+function App() {
+  const [callDetails, setCallDetails] = useState<CallDetails | undefined>();
+
+  const appState: AppState = !callDetails ? 'Landing' : 'FuturePage';
 
   switch(appState) {
-    case 'Landing': return <LandingPage onStartCall={() => {}} />;
+    case 'Landing': return <LandingPage onStartCall={(callDetails) => {setCallDetails(callDetails)}} />;
     case 'FuturePage': return <>Future Page...</>;
   }
 }

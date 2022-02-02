@@ -3,13 +3,18 @@ import { Image, mergeStyles, PrimaryButton, Stack, Text, TextField } from '@flue
 import heroSVG from '../assets/hero.svg';
 import { DisplayNameField } from '../components/DisplayNameField';
 
+enum LocalStorageKeys {
+  DisplayName = 'DisplayName',
+  TeamsUserMRI = 'TeamsUserMRI'
+};
+
 export interface LandingPageProps {
-  onStartCall(callDetails: { displayName: string; }): void;
+  onStartCall(callDetails: { displayName: string; teamsUserMRI: string }): void;
 }
 
 export const LandingPage = (props: LandingPageProps) => {
-  const [displayName, setDisplayName] = useState<string | undefined>((window.localStorage && window.localStorage.getItem('DisplayName')) ?? undefined);
-  const [teamsUserMRI, setTeamsUserMRI] = useState<string | undefined>();
+  const [displayName, setDisplayName] = useState<string | undefined>((window.localStorage && window.localStorage.getItem(LocalStorageKeys.DisplayName)) ?? undefined);
+  const [teamsUserMRI, setTeamsUserMRI] = useState<string | undefined>((window.localStorage && window.localStorage.getItem(LocalStorageKeys.TeamsUserMRI)) ?? undefined);
   const buttonEnabled = displayName && teamsUserMRI;
 
   return (
@@ -36,10 +41,11 @@ export const LandingPage = (props: LandingPageProps) => {
             <TextField
               inputClassName={inputBoxTextStyle}
               label="Enter Teams User MRI"
-              iconProps={{ iconName: 'phone' }}
               onChange={(_, newValue) => setTeamsUserMRI(newValue)}
               required
               styles={textFieldStyleProps}
+              placeholder="8:orgid:"
+              defaultValue={teamsUserMRI ?? undefined}
             />
           </Stack.Item>
           <Stack.Item>
@@ -48,9 +54,10 @@ export const LandingPage = (props: LandingPageProps) => {
               className={buttonStyle}
               text={'Start Call'}
               onClick={() => {
-                if (displayName) {
-                  (window.localStorage && window.localStorage.setItem('DisplayName', displayName))
-                  props.onStartCall({ displayName });
+                if (displayName && teamsUserMRI) {
+                  (window.localStorage && window.localStorage.setItem(LocalStorageKeys.DisplayName, displayName));
+                  (window.localStorage && window.localStorage.setItem(LocalStorageKeys.TeamsUserMRI, teamsUserMRI));
+                  props.onStartCall({ displayName, teamsUserMRI });
                 }
               }}
             />
