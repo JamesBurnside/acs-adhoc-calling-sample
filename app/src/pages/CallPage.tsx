@@ -80,7 +80,7 @@ export const CallPage = (props: CallPageProps): JSX.Element => {
         callControls: {
           onFetchCustomButtonProps:[
             () => ({
-              placement: 'afterOptionsButton',
+              placement: 'afterEndCallButton',
               text: !isMobileSession ? 'Call Diagnostics' : undefined,
               onRenderIcon: DownloadCallLogsIcon,
               onClick: () => {
