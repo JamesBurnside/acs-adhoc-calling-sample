@@ -12,15 +12,22 @@ npm run setup
 
 ## Run Locally
 
-Setup environment variables
-
-```powershell
-# Powershell
-$env:ResourceConnectionString='<connection string>'
-```
-
-Run server and app
+In one terminal window, start the server:
 
 ```sh
+# Set environment variables
+$env:ResourceConnectionString='<connection string>' # <-- powershell, differs per environment
+
+# Navigate to server dir
+cd server
+
+# Start server
+npm start
+```
+
+In another, start the app:
+
+```sh
+cd app
 npm run start
 ```
