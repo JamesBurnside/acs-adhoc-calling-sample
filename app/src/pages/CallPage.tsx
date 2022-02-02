@@ -10,7 +10,7 @@ import {
   createAzureCommunicationCallAdapter,
   toFlatCommunicationIdentifier
 } from '@azure/communication-react';
-import { Spinner, Stack } from '@fluentui/react';
+import { FontIcon, Spinner, Stack } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { createAutoRefreshingCredential } from '../utils/credential';
 import MobileDetect from 'mobile-detect';
@@ -76,6 +76,26 @@ export const CallPage = (props: CallPageProps): JSX.Element => {
       adapter={adapter}
       callInvitationUrl={window.location.href}
       formFactor={isMobileSession ? 'mobile' : 'desktop'}
+      options={{
+        callControls: {
+          onFetchCustomButtonProps:[
+            () => ({
+              placement: 'afterOptionsButton',
+              text: !isMobileSession ? 'Call Diagnostics' : undefined,
+              onRenderIcon: DownloadCallLogsIcon,
+              onClick: () => {
+                alert('button clicked!');
+              }
+            })
+          ]
+        }
+      }}
     />
   );
+};
+
+const DownloadCallLogsIcon = (): JSX.Element | null => {
+  return (
+    <FontIcon style={{height: '20px', width: '20px'}} iconName="UnknownCall" />
+  )
 };
