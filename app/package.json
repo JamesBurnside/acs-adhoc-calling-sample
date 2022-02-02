@@ -26,7 +26,7 @@
     "build": "react-scripts build",
     "test": "echo 'no tests",
     "eject": "react-scripts eject",
-    "package": "copyfiles -E -u 3 \"../Server/dist/**/*\" dist && copyfiles -E \"build/**/*\" dist"
+    "package": "rimraf dist && copyfiles -E -u 3 \"../Server/dist/**/*\" dist && copyfiles -E \"build/**/*\" dist"
   },
   "eslintConfig": {
     "extends": [
